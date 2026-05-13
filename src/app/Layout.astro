@@ -1,0 +1,88 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogType?: string;
+  ogImage?: string;
+  ogUrl?: string;
+  publishedTime?: string;
+  articleAuthor?: string;
+  articleTags?: string[];
+}
+
+import { ViewTransitions } from 'astro:transitions';
+
+const { title, description, ogTitle, ogType, ogImage, ogUrl, publishedTime, articleAuthor, articleTags } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <ViewTransitions />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={ogTitle || title} />
+    {ogType && <meta property="og:type" content={ogType} />}
+    {ogUrl && <meta property="og:url" content={ogUrl} />}
+    <meta property="og:site_name" content="nullpt3r" />
+    <meta property="og:locale" content="ru_RU" />
+    {description && <meta property="og:description" content={description} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {articleAuthor && <meta property="article:author" content={articleAuthor} />}
+    {articleTags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    <script is:inline>
+      (function () {
+        var KEY = 'nullptr-theme';
+        var saved = localStorage.getItem(KEY);
+        if (
+          saved === 'dark' ||
+          (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        --bg: oklch(99% 0.002 240);
+        --surface: oklch(100% 0 0);
+        --fg: oklch(18% 0.012 250);
+        --muted: oklch(54% 0.012 250);
+        --border: oklch(92% 0.005 250);
+        --accent: oklch(58% 0.18 255);
+        --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+        --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+        --inner-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.04);
+        --logo-size: 22px;
+      }
+      .dark {
+        --bg: oklch(14% 0.006 250);
+        --surface: oklch(18% 0.008 250);
+        --fg: oklch(92% 0.005 250);
+        --muted: oklch(52% 0.01 250);
+        --border: oklch(26% 0.008 250);
+        --accent: oklch(62% 0.18 255);
+        --inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+    </style>
+  </head>
+  <body class="m-0 bg-[var(--bg)] text-[var(--fg)] font-body text-[15px]/[1.6] antialiased transition-colors duration-200">
+    <slot />
+  </body>
+</html>
+
+<script>
+  document.addEventListener('astro:before-swap', (e) => {
+    const KEY = 'nullptr-theme';
+    const saved = localStorage.getItem(KEY);
+    const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    e.newDocument.documentElement.classList.toggle('dark', isDark);
+  });
+</script>

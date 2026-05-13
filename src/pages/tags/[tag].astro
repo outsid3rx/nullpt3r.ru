@@ -1,0 +1,92 @@
+---
+import plural from 'plural-ru';
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../app/Layout.astro';
+import Header from '../../widgets/Header.astro';
+import PostCard from '../../widgets/PostCard.astro';
+import Pagination from '../../widgets/Pagination.astro';
+import Footer from '../../widgets/Footer.astro';
+import { getCollection } from 'astro:content';
+import { postSlug } from '../../shared/lib/db';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection('posts');
+  const published = posts.filter((p) => !p.data.draft);
+  const allTags = new Set<string>();
+  for (const p of published) {
+    for (const t of p.data.tags) {
+      allTags.add(t.toLowerCase());
+    }
+  }
+  return Array.from(allTags).map((tag) => ({
+    params: { tag },
+  }));
+};
+
+const { tag } = Astro.params;
+if (!tag || typeof tag !== 'string') {
+  return Astro.redirect('/');
+}
+
+const allPosts = (await getCollection('posts'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const tagPosts = allPosts.filter((p) => p.data.tags.some((t) => t.toLowerCase() === tag));
+
+const canonicalTag =
+  allPosts.flatMap((p) => p.data.tags).find((t) => t.toLowerCase() === tag) ?? tag;
+
+const perPage = 10;
+const totalPages = Math.max(1, Math.ceil(tagPosts.length / perPage));
+const page = 1;
+const start = (page - 1) * perPage;
+const pagePosts = tagPosts.slice(start, start + perPage);
+
+const countLabel = `${tagPosts.length} ${plural(tagPosts.length, 'статья', 'статьи', 'статей')}`;
+---
+
+<Layout
+  title={`nullptr — статьи по теме «${canonicalTag}»`}
+  description={`Статьи по тегу «${canonicalTag}»`}
+>
+  <Header />
+  <main class="mx-auto max-w-[720px] px-6 pb-20 pt-10 max-sm:px-4 max-sm:pb-[60px]">
+    <div class="mb-4">
+      <div class="mb-4 text-[13px] -tracking-[0.01em] text-muted">
+        <a href="/" class="hover:text-accent">← Все статьи</a>
+      </div>
+      <h1 class="m-0 mb-2 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]">#{canonicalTag}</h1>
+      <span class="text-[13px] -tracking-[0.01em] text-muted">{countLabel}</span>
+    </div>
+
+    {
+      pagePosts.length > 0 ? (
+        pagePosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            heroImage={post.data.heroImage}
+            author={post.data.author}
+            authorAvatar={post.data.authorAvatar}
+            publishedAt={post.data.publishedAt}
+            tags={post.data.tags}
+            slug={postSlug(post)}
+          />
+        ))
+      ) : (
+        <div class="py-20 text-center text-muted">
+          <p class="m-0 mb-4 text-[14px]">По тегу «{canonicalTag}» {plural(0, 'статья', 'статьи', 'статей')} пока нет</p>
+          <a href="/" class="text-[13px] text-accent hover:opacity-70">← Все статьи</a>
+        </div>
+      )
+    }
+
+    {
+      totalPages > 1 && (
+        <Pagination currentPage={page} totalPages={totalPages} basePath={`/tags/${tag}`} />
+      )
+    }
+  </main>
+  <Footer />
+</Layout>

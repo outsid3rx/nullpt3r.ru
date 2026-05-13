@@ -1,0 +1,59 @@
+---
+import plural from 'plural-ru';
+import Layout from '../../app/Layout.astro';
+import Header from '../../widgets/Header.astro';
+import PostCard from '../../widgets/PostCard.astro';
+import Pagination from '../../widgets/Pagination.astro';
+import Footer from '../../widgets/Footer.astro';
+import { getCollection } from 'astro:content';
+import { postSlug } from '../../shared/lib/db';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const published = posts
+    .filter((p) => !p.data.draft)
+    .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+  const perPage = 10;
+  const totalPages = Math.max(1, Math.ceil(published.length / perPage));
+
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+    props: { page: i + 2, totalPages, allPosts: published },
+  }));
+}
+
+const { page, totalPages, allPosts } = Astro.props;
+
+const perPage = 10;
+const start = (page - 1) * perPage;
+const pagePosts = allPosts.slice(start, start + perPage);
+---
+
+<Layout title={`nullptr — страница ${page}`} description={`Страница ${page} блога о разработке`}>
+  <Header />
+  <main class="mx-auto max-w-[720px] px-6 pb-20 pt-10 max-sm:px-4 max-sm:pb-[60px]">
+    <div class="mb-8 flex items-baseline justify-between">
+      <h1 class="m-0 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]">Последние статьи</h1>
+      <span class="text-[13px] -tracking-[0.01em] text-muted">{allPosts.length} {plural(allPosts.length, 'статья', 'статьи', 'статей')}</span>
+    </div>
+
+    {
+      pagePosts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          heroImage={post.data.heroImage}
+          author={post.data.author}
+          authorAvatar={post.data.authorAvatar}
+          publishedAt={post.data.publishedAt}
+          tags={post.data.tags}
+            slug={postSlug(post)}
+        />
+      ))
+    }
+
+    {totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} />}
+  </main>
+  <Footer />
+</Layout>

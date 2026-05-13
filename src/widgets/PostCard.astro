@@ -1,0 +1,69 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  heroImage?: string;
+  author: string;
+  authorAvatar?: string;
+  publishedAt: Date;
+  tags: string[];
+  slug: string;
+}
+
+const {
+  title,
+  description,
+  heroImage,
+  publishedAt,
+  tags,
+  slug,
+} = Astro.props;
+
+const dateStr = publishedAt.toLocaleDateString('ru-RU', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<div class="border-b border-border py-5 first-of-type:pt-0 last-of-type:border-none">
+  <a href={`/posts/${slug}`} class="block text-inherit no-underline transition-opacity duration-150 hover:opacity-70">
+    {
+      heroImage ? (
+        <div class="relative mb-4 aspect-video w-full overflow-hidden rounded-lg">
+          <img src={heroImage} alt="" loading="lazy" class="h-full w-full object-cover" />
+        </div>
+      ) : (
+        <div class="mb-4 flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-border to-surface" style="position:relative">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-10 w-10 text-muted opacity-40"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+      )
+    }
+    <div class="mb-2 flex items-center gap-2.5 text-[12px] -tracking-[0.01em] text-muted">
+      <span>{dateStr}</span>
+    </div>
+    <h2 class="mb-2 font-display text-[18px]/[1.35] font-semibold -tracking-[0.015em] text-fg">{title}</h2>
+    <p class="m-0 max-w-[600px] text-[14px]/[1.55] text-muted">{description}</p>
+  </a>
+  <div class="mt-2.5 flex flex-wrap gap-1.5">
+    {
+      tags.map((tag) => (
+        <a href={`/tags/${tag.toLowerCase()}`} class="inline-block rounded-tag bg-border px-2 py-0.5 text-[11px] -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:bg-accent hover:text-white">
+          {tag}
+        </a>
+      ))
+    }
+  </div>
+</div>

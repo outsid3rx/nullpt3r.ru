@@ -1,0 +1,12 @@
+dist/
+.astro/
+.storybook/
+.opencode/
+.specify/
+specs/
+design/
+artifacts/
+stories/
+node_modules/
+public/
+pnpm-lock.yaml

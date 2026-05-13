@@ -1,0 +1,95 @@
+---
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+}
+
+const { currentPage, totalPages, basePath = '' } = Astro.props;
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+
+function pageUrl(n: number): string {
+  if (n === 1) return basePath || '/';
+  return `${basePath}/page/${n}`;
+}
+---
+
+<nav class="flex items-center justify-center gap-1 pt-8" aria-label="Навигация по страницам">
+  {
+    hasPrev ? (
+      <a href={pageUrl(currentPage - 1)} class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg" aria-label="Предыдущая страница">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="block h-3.5 w-3.5"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+    ) : (
+      <span class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30" aria-label="Предыдущая страница">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="block h-3.5 w-3.5"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </span>
+    )
+  }
+  {
+    Array.from({ length: totalPages }, (_, i) => i + 1).map((n) =>
+      n === currentPage ? (
+        <span class="inline-flex min-w-8 items-center justify-center rounded-md border border-fg bg-fg px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-[var(--bg)]">
+          {n}
+        </span>
+      ) : (
+        <a href={pageUrl(n)} class="inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg">
+          {n}
+        </a>
+      ),
+    )
+  }
+  {
+    hasNext ? (
+      <a href={pageUrl(currentPage + 1)} class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg" aria-label="Следующая страница">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="block h-3.5 w-3.5"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </a>
+    ) : (
+      <span class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30" aria-label="Следующая страница">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="block h-3.5 w-3.5"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </span>
+    )
+  }
+  <span class="ml-3 text-[12px] -tracking-[0.01em] text-muted">{currentPage} / {totalPages}</span>
+</nav>

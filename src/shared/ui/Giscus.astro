@@ -1,0 +1,124 @@
+<section class="giscus-wrapper" data-od-id="giscus">
+  <div class="giscus-placeholder" id="giscus-placeholder">
+    <div class="giscus-icon">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <p class="giscus-title">Комментарии</p>
+    <p class="giscus-sub">Загрузка комментариев...</p>
+  </div>
+</section>
+
+<script>
+  let giscusObserver = null;
+  let giscusIntersector = null;
+
+  document.addEventListener('astro:page-load', () => {
+    const placeholder = document.getElementById('giscus-placeholder');
+    if (!placeholder) return;
+
+    if (giscusObserver) giscusObserver.disconnect();
+    if (giscusIntersector) giscusIntersector.disconnect();
+
+    if (document.querySelector('iframe.giscus-frame')) {
+      attachObserver();
+      return;
+    }
+
+    giscusIntersector = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        giscusIntersector.disconnect();
+        giscusIntersector = null;
+
+        const isDark = document.documentElement.classList.contains('dark');
+        const script = document.createElement('script');
+        script.src = 'https://giscus.app/client.js';
+        script.setAttribute('data-repo', 'outsid3rx/nullpt3r.ru');
+        script.setAttribute('data-repo-id', 'R_kgDOSctvEA');
+        script.setAttribute('data-category', 'Announcements');
+        script.setAttribute('data-category-id', 'DIC_kwDOSctvEM4C8-3s');
+        script.setAttribute('data-mapping', 'og:title');
+        script.setAttribute('data-strict', '0');
+        script.setAttribute('data-reactions-enabled', '1');
+        script.setAttribute('data-emit-metadata', '0');
+        script.setAttribute('data-input-position', 'bottom');
+        script.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        script.setAttribute('data-lang', 'ru');
+        script.setAttribute('data-loading', 'lazy');
+        script.setAttribute('crossorigin', 'anonymous');
+        script.async = true;
+
+        script.onload = () => {
+          placeholder.remove();
+          attachObserver();
+        };
+
+        placeholder.after(script);
+      },
+      { rootMargin: '0px 0px 300px 0px' },
+    );
+
+    giscusIntersector.observe(placeholder);
+  });
+
+  function attachObserver() {
+    if (giscusObserver) giscusObserver.disconnect();
+    giscusObserver = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const iframe = document.querySelector('iframe.giscus-frame');
+      if (iframe) {
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: isDark ? 'dark' : 'light' } } },
+          'https://giscus.app',
+        );
+      }
+    });
+    giscusObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>
+
+<style>
+  .giscus-wrapper {
+    margin-top: 48px;
+  }
+  .giscus-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .giscus-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--muted);
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+  .giscus-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .giscus-title {
+    font: 600 15px/1.4 var(--font-display);
+    color: var(--fg);
+    margin: 0 0 6px;
+  }
+  .giscus-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

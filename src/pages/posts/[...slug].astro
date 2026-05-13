@@ -1,0 +1,230 @@
+---
+import plural from 'plural-ru';
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../app/Layout.astro';
+import Header from '../../widgets/Header.astro';
+import Footer from '../../widgets/Footer.astro';
+import Giscus from '../../shared/ui/Giscus.astro';
+import RelatedPosts from '../../widgets/RelatedPosts.astro';
+import { getCollection } from 'astro:content';
+import { postSlug } from '../../shared/lib/db';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection('posts');
+  const published = posts.filter((p) => !p.data.draft);
+  return published.map((post) => ({
+    params: { slug: postSlug(post) },
+  }));
+};
+
+const { slug } = Astro.params;
+if (!slug || typeof slug !== 'string') {
+  return Astro.redirect('/');
+}
+
+const allPosts = await getCollection('posts');
+const published = allPosts.filter((p) => !p.data.draft);
+const post = published.find((p) => postSlug(p) === slug);
+
+if (!post) {
+  return Astro.redirect('/');
+}
+
+const { Content } = await post.render();
+
+const readingTime = Math.max(1, Math.round((post.body?.trim().split(/\s+/).length ?? 0) / 150));
+
+const dateStr = post.data.publishedAt.toLocaleDateString('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const initials = post.data.author
+  .split(' ')
+  .map((n) => n[0])
+  .join('')
+  .toUpperCase();
+---
+
+<Layout
+  title={`${post.data.title} — nullptr`}
+  description={post.data.description}
+  ogTitle={post.data.title}
+  ogType="article"
+  ogUrl={`https://nullpt3r.ru/posts/${slug}/`}
+  ogImage={`/og/${slug}.png`}
+  publishedTime={post.data.publishedAt.toISOString()}
+  articleAuthor={post.data.author}
+  articleTags={post.data.tags}
+>
+  <Header showProgress />
+
+  <main class="mx-auto max-w-[720px] px-6 pt-10 max-sm:px-4">
+    <article>
+      <div>
+        <div class="mb-4 text-[13px] -tracking-[0.01em] text-muted">
+          <a href="/" class="hover:text-accent">← Все статьи</a>
+        </div>
+        <h1 class="m-0 mb-4 font-display text-[clamp(26px,4vw,36px)]/[1.25] font-bold -tracking-[0.02em]">{post.data.title}</h1>
+        <p class="m-0 mb-6 max-w-[620px] text-[17px]/[1.5] text-muted">{post.data.description}</p>
+        <div class="mb-6 flex items-center gap-3 text-[14px] text-muted">
+          {
+            post.data.authorAvatar ? (
+              <img src={post.data.authorAvatar} alt={post.data.author} class="h-10 w-10 shrink-0 rounded-full object-cover" />
+            ) : (
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-border font-display text-[14px]/none font-semibold text-muted">{initials}</div>
+            )
+          }
+          <div>
+            <span class="font-medium text-fg">{post.data.author}</span>
+            <span class="text-border">·</span>
+            <span>{dateStr}</span>
+            <span class="text-border">·</span>
+            <span>{readingTime} {plural(readingTime, 'минута', 'минуты', 'минут')} чтения</span>
+          </div>
+        </div>
+      </div>
+
+      {
+        post.data.heroImage ? (
+          <div class="relative mb-10 aspect-video w-full overflow-hidden rounded-lg">
+            <img src={post.data.heroImage} alt="" class="h-full w-full object-cover" />
+          </div>
+        ) : (
+          <div class="relative mb-10 flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-border to-surface">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-12 w-12 text-muted opacity-40"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </div>
+        )
+      }
+
+      <div class="article-body prose prose-neutral max-w-[660px] dark:prose-invert" data-od-id="body">
+        <Content />
+      </div>
+
+      <div class="mt-10 border-t border-border pt-8">
+        <div class="flex flex-wrap gap-6 text-[13px] text-muted">
+          <span class="flex items-center gap-1.5">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-3.5 w-3.5 opacity-60"
+              ><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line
+                x1="16"
+                y1="2"
+                x2="16"
+                y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line
+                x1="3"
+                y1="10"
+                x2="21"
+                y2="10"></line></svg
+            >
+            {dateStr}
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-3.5 w-3.5 opacity-60"
+              ><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"
+              ></polyline></svg
+            >
+            {readingTime} {plural(readingTime, 'минута', 'минуты', 'минут')}
+          </span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {
+            post.data.tags.map((tag) => (
+              <a href={`/tags/${tag.toLowerCase()}`} class="inline-block rounded-tag bg-border px-2.5 py-0.5 text-[12px] text-muted no-underline transition-all duration-150 hover:bg-accent hover:text-surface">
+                {tag}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <Giscus />
+    </article>
+  </main>
+
+  <RelatedPosts currentSlug={slug} posts={published} />
+
+  <Footer />
+
+  <button class="back-to-top fixed left-0 top-0 bottom-0 z-20 flex w-[70px] cursor-pointer items-center justify-center border-none bg-transparent text-muted opacity-0 pointer-events-none transition-all duration-300 hover:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] hover:text-accent focus-visible:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-md:left-4 max-md:top-auto max-md:bottom-6 max-md:h-[42px] max-md:w-[42px] max-md:rounded-full max-md:border max-md:border-solid max-md:border-border max-md:bg-[var(--bg)] max-md:hover:border-accent max-md:hover:bg-[color-mix(in_oklch,var(--accent)_15%,var(--bg))]" id="backToTop" aria-label="Наверх" data-astro-transition-persist="back-to-top">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-[26px] w-[26px] transition-transform duration-250 max-md:h-5 max-md:w-5 group-hover:-translate-y-[3px]"
+    ><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+</Layout>
+
+<script>
+  import { initReadingProgress } from '../../features/ReadingProgress/client.ts';
+
+  document.addEventListener('astro:page-load', () => {
+    initReadingProgress();
+  });
+</script>
+
+<style is:global>
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .article-body :global(code) {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .article-body :global(pre) {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+  }
+  .article-body :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .article-body :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 24px;
+    font-style: italic;
+    color: var(--muted);
+  }
+</style>

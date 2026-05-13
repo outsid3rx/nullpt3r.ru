@@ -1,0 +1,55 @@
+---
+import plural from 'plural-ru';
+import Layout from '../app/Layout.astro';
+import Header from '../widgets/Header.astro';
+import PostCard from '../widgets/PostCard.astro';
+import Pagination from '../widgets/Pagination.astro';
+import Footer from '../widgets/Footer.astro';
+import { getCollection } from 'astro:content';
+import { postSlug } from '../shared/lib/db';
+
+const allPosts = (await getCollection('posts'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const perPage = 10;
+const page = 1;
+const totalPages = Math.max(1, Math.ceil(allPosts.length / perPage));
+const start = (page - 1) * perPage;
+const pagePosts = allPosts.slice(start, start + perPage);
+---
+
+<Layout title="nullptr — блог о разработке" description="Блог о разработке и технологиях">
+  <Header />
+  <main class="mx-auto max-w-[720px] px-6 pb-14 pt-10 max-sm:px-4">
+    <div class="mb-8 flex items-baseline justify-between">
+      <h1 class="m-0 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]">Последние статьи</h1>
+      <span class="text-[13px] -tracking-[0.01em] text-muted">{allPosts.length} {plural(allPosts.length, 'статья', 'статьи', 'статей')}</span>
+    </div>
+
+    {
+      pagePosts.length > 0 ? (
+        pagePosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            heroImage={post.data.heroImage}
+            author={post.data.author}
+            authorAvatar={post.data.authorAvatar}
+            publishedAt={post.data.publishedAt}
+            tags={post.data.tags}
+            slug={postSlug(post)}
+          />
+        ))
+      ) : (
+        <div class="py-20 text-center text-muted">
+          <p class="m-0 mb-4 text-[14px]">Статей пока нет</p>
+          <a href="/" class="text-[13px] text-accent hover:opacity-70">На главную</a>
+        </div>
+      )
+    }
+
+    {totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} />}
+  </main>
+  <Footer />
+</Layout>
