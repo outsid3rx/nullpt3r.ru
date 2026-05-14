@@ -5,12 +5,6 @@
   <title>OG Image — nullptr</title>
   <style>
     :root {
-      --bg:      oklch(99% 0.002 240);
-      --surface: oklch(100% 0 0);
-      --fg:      oklch(18% 0.012 250);
-      --muted:   oklch(54% 0.012 250);
-      --border:  oklch(92% 0.005 250);
-      --accent:  oklch(58% 0.18 255);
       --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
       --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
     }
@@ -18,8 +12,8 @@
     html { -webkit-font-smoothing: antialiased; }
 
     body {
-      background: var(--bg);
-      color: var(--fg);
+      background: #0e0e11;
+      color: #fff;
       font: 16px/1.6 var(--font-body);
       min-height: 100vh;
       display: flex;
@@ -38,40 +32,61 @@
       width: 100%;
       max-width: 1200px;
       aspect-ratio: 1200 / 630;
-      background: var(--bg);
-      border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+    }
+
+    .og-bg {
+      position: absolute;
+      inset: 0;
+      background: url("{{heroImage}}") center/cover no-repeat;
+    }
+
+    .og-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(0,0,0,0.82) 0%,
+        rgba(0,0,0,0.65) 50%,
+        rgba(0,0,0,0.75) 100%
+      );
+    }
+
+    .og-content {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
-      position: relative;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+      height: 100%;
     }
 
     .og-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 40px 40px 0;
+      padding: 40px 48px 0;
     }
     .og-logo {
       font: 700 22px/1 var(--font-display);
       letter-spacing: -0.03em;
-      color: var(--fg);
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .og-logo span { color: var(--accent); }
+    .og-logo span { color: oklch(62% 0.18 255); }
     .og-logo-sub {
       font-size: 13px;
       font-weight: 400;
-      color: var(--muted);
+      color: rgba(255,255,255,0.5);
       letter-spacing: -0.01em;
     }
     .og-domain {
       font-size: 13px;
-      color: var(--muted);
+      color: rgba(255,255,255,0.4);
       letter-spacing: 0.02em;
     }
 
@@ -79,8 +94,8 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 56px 40px 0;
+      justify-content: flex-end;
+      padding: 160px 48px 0;
     }
 
     .og-tags {
@@ -93,8 +108,9 @@
       display: inline-block;
       padding: 3px 10px;
       border-radius: 4px;
-      background: var(--border);
-      color: var(--muted);
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      color: rgba(255,255,255,0.85);
       font-size: 11px;
       letter-spacing: 0.01em;
     }
@@ -102,9 +118,10 @@
     .og-title {
       font: 700 clamp(28px, 3.5vw, 44px)/1.2 var(--font-display);
       letter-spacing: -0.02em;
-      color: var(--fg);
+      color: #fff;
       max-width: 85%;
       margin-bottom: 16px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 
     .og-meta {
@@ -112,7 +129,7 @@
       align-items: center;
       gap: 12px;
       font-size: 13px;
-      color: var(--muted);
+      color: rgba(255,255,255,0.6);
     }
     .og-meta .avatar,
     .og-meta .avatar-img {
@@ -122,22 +139,33 @@
       flex-shrink: 0;
     }
     .og-meta .avatar {
-      background: var(--border);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       font: 600 11px/1 var(--font-display);
-      color: var(--muted);
+      color: rgba(255,255,255,0.7);
     }
     .og-meta .avatar-img {
       object-fit: cover;
     }
     .og-meta .author-name {
-      color: var(--fg);
+      color: #fff;
       font-weight: 500;
     }
     .og-meta .sep {
-      color: var(--border);
+      color: rgba(255,255,255,0.2);
+    }
+
+    .og-bottom {
+      padding: 0 48px 28px;
+      text-align: right;
+    }
+    .og-bottom-link {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.01em;
     }
   </style>
 </head>
@@ -145,27 +173,37 @@
 
 <div class="canvas-wrapper">
   <div class="og-canvas" id="ogCanvas">
-    <div class="og-top">
-      <div class="og-logo">
-        nullptr<span>;</span>
-        <span class="og-logo-sub">блог о разработке</span>
-      </div>
-      <div class="og-domain">{{domain}}</div>
-    </div>
-    <div class="og-body">
-      <div class="og-tags">
-        {{tags}}
-      </div>
-      <h1 class="og-title">{{title}}</h1>
-      <div class="og-meta">
-        {{avatar}}
-        <div>
-          <span class="author-name">{{author}}</span>
-          <span class="sep">·</span>
-          <span>{{date}}</span>
-          <span class="sep">·</span>
-          <span>{{readingTime}} мин чтения</span>
+    <div class="og-bg"></div>
+    <div class="og-overlay"></div>
+
+    <div class="og-content">
+      <div class="og-top">
+        <div class="og-logo">
+          nullptr<span>;</span>
+          <span class="og-logo-sub">блог о разработке</span>
         </div>
+        <div class="og-domain">{{domain}}</div>
+      </div>
+
+      <div class="og-body">
+        <div class="og-tags">
+          {{tags}}
+        </div>
+        <h1 class="og-title">{{title}}</h1>
+        <div class="og-meta">
+          {{avatar}}
+          <div>
+            <span class="author-name">{{author}}</span>
+            <span class="sep">·</span>
+            <span>{{date}}</span>
+            <span class="sep">·</span>
+            <span>{{readingTime}} мин чтения</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="og-bottom">
+        <span class="og-bottom-link">{{domain}}</span>
       </div>
     </div>
   </div>

@@ -4,6 +4,8 @@ import { chromium } from 'playwright';
 
 const POSTS_DIR = new URL('../src/content/posts/', import.meta.url);
 const TEMPLATE_PATH = new URL('../src/shared/lib/og-template.html', import.meta.url);
+const TEMPLATE_OVERLAY_PATH = new URL('../src/shared/lib/og-template-overlay.html', import.meta.url);
+const PUBLIC_DIR = new URL('../public/', import.meta.url);
 const OUT_DIR = new URL('../public/og/', import.meta.url);
 const SITE_DOMAIN = 'nullpt3r.ru';
 
@@ -36,6 +38,10 @@ function parseFrontmatter(content) {
       data.description = val.replace(/^['"]|['"]$/g, '');
     } else if (kv[1] === 'author') {
       data.author = val.replace(/^['"]|['"]$/g, '');
+    } else if (kv[1] === 'heroImage') {
+      data.heroImage = val.replace(/^['"]|['"]$/g, '');
+    } else if (kv[1] === 'authorAvatar') {
+      data.authorAvatar = val.replace(/^['"]|['"]$/g, '');
     }
   }
 
@@ -65,7 +71,8 @@ function getInitials(author) {
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
 
-  const template = readFileSync(TEMPLATE_PATH, 'utf-8');
+  const templatePlain = readFileSync(TEMPLATE_PATH, 'utf-8');
+  const templateOverlay = readFileSync(TEMPLATE_OVERLAY_PATH, 'utf-8');
   const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md'));
 
   const pages = [];
@@ -83,14 +90,30 @@ async function main() {
       .map((t) => `        <span class="og-tag">${t}</span>`)
       .join('\n');
 
-    const html = template
+    let avatarHtml;
+    if (data.authorAvatar) {
+      const avatarUrl = new URL(data.authorAvatar.replace(/^\//, ''), PUBLIC_DIR);
+      avatarHtml = `<img src="${avatarUrl.href}" alt="" class="avatar-img" />`;
+    } else {
+      avatarHtml = `<div class="avatar">${initials}</div>`;
+    }
+
+    const hasHero = !!data.heroImage;
+    const template = hasHero ? templateOverlay : templatePlain;
+
+    let html = template
       .replace('{{title}}', data.title || '')
       .replace('{{tags}}', tagsHtml)
-      .replace('{{initials}}', initials)
+      .replace('{{avatar}}', avatarHtml)
       .replace('{{author}}', data.author)
       .replace('{{date}}', dateStr)
       .replace('{{readingTime}}', String(readingTime))
-      .replace('{{domain}}', SITE_DOMAIN);
+      .replaceAll('{{domain}}', SITE_DOMAIN);
+
+    if (hasHero) {
+      const heroUrl = new URL(data.heroImage.replace(/^\//, ''), PUBLIC_DIR);
+      html = html.replace('{{heroImage}}', heroUrl.href);
+    }
 
     pages.push({ slug, html });
   }
