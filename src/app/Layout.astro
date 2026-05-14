@@ -47,6 +47,7 @@ const {
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {articleAuthor && <meta property="article:author" content={articleAuthor} />}
     {articleTags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <script is:inline>
       (function () {
         const saved = localStorage.getItem('nullptr-theme');

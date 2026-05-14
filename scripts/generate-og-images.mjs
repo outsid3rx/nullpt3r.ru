@@ -1,4 +1,11 @@
-import { readFileSync, writeFileSync, unlinkSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  unlinkSync,
+  mkdirSync,
+  readdirSync,
+  existsSync,
+} from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
