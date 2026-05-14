@@ -66,14 +66,24 @@ const initials = post.data.author
         <div class="mb-4 text-[13px] -tracking-[0.01em] text-muted">
           <a href="/" class="hover:text-accent">← Все статьи</a>
         </div>
-        <h1 class="m-0 mb-4 font-display text-[clamp(26px,4vw,36px)]/[1.25] font-bold -tracking-[0.02em]">{post.data.title}</h1>
+        <h1
+          class="m-0 mb-4 font-display text-[clamp(26px,4vw,36px)]/[1.25] font-bold -tracking-[0.02em]"
+        >
+          {post.data.title}
+        </h1>
         <p class="m-0 mb-6 max-w-[620px] text-[17px]/[1.5] text-muted">{post.data.description}</p>
         <div class="mb-6 flex items-center gap-3 text-[14px] text-muted">
           {
             post.data.authorAvatar ? (
-              <img src={post.data.authorAvatar} alt={post.data.author} class="h-10 w-10 shrink-0 rounded-full object-cover" />
+              <img
+                src={post.data.authorAvatar}
+                alt={post.data.author}
+                class="h-10 w-10 shrink-0 rounded-full object-cover"
+              />
             ) : (
-              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-border font-display text-[14px]/none font-semibold text-muted">{initials}</div>
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-border font-display text-[14px]/none font-semibold text-muted">
+                {initials}
+              </div>
             )
           }
           <div>
@@ -94,7 +104,10 @@ const initials = post.data.author
         )
       }
 
-      <div class="article-body prose prose-neutral max-w-[660px] dark:prose-invert" data-od-id="body">
+      <div
+        class="article-body prose prose-neutral max-w-[660px] dark:prose-invert"
+        data-od-id="body"
+      >
         <Content />
       </div>
 
@@ -133,13 +146,17 @@ const initials = post.data.author
               ><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"
               ></polyline></svg
             >
-            {readingTime} {plural(readingTime, 'минута', 'минуты', 'минут')}
+            {readingTime}
+            {plural(readingTime, 'минута', 'минуты', 'минут')}
           </span>
         </div>
         <div class="mt-4 flex flex-wrap gap-2">
           {
             post.data.tags.map((tag) => (
-              <a href={`/tags/${tag.toLowerCase()}`} class="inline-block rounded-tag bg-border px-2.5 py-0.5 text-[12px] text-muted no-underline transition-all duration-150 hover:bg-accent hover:text-surface">
+              <a
+                href={`/tags/${tag.toLowerCase()}`}
+                class="inline-block rounded-tag bg-border px-2.5 py-0.5 text-[12px] text-muted no-underline transition-all duration-150 hover:bg-accent hover:text-surface"
+              >
                 {tag}
               </a>
             ))
@@ -155,7 +172,12 @@ const initials = post.data.author
 
   <Footer />
 
-  <button class="back-to-top fixed left-0 top-0 bottom-0 z-20 flex w-[70px] cursor-pointer items-center justify-center border-none bg-transparent text-muted opacity-0 pointer-events-none transition-all duration-300 hover:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] hover:text-accent focus-visible:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-md:left-4 max-md:top-auto max-md:bottom-6 max-md:h-[42px] max-md:w-[42px] max-md:rounded-full max-md:border max-md:border-solid max-md:border-border max-md:bg-[var(--bg)] max-md:hover:border-accent max-md:hover:bg-[color-mix(in_oklch,var(--accent)_15%,var(--bg))]" id="backToTop" aria-label="Наверх" data-astro-transition-persist="back-to-top">
+  <button
+    class="back-to-top fixed left-0 top-0 bottom-0 z-20 flex w-[70px] cursor-pointer items-center justify-center border-none bg-transparent text-muted opacity-0 pointer-events-none transition-all duration-300 hover:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] hover:text-accent focus-visible:bg-[color-mix(in_oklch,var(--accent)_25%,transparent)] focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-md:left-4 max-md:top-auto max-md:bottom-6 max-md:h-[42px] max-md:w-[42px] max-md:rounded-full max-md:border max-md:border-solid max-md:border-border max-md:bg-[var(--bg)] max-md:hover:border-accent max-md:hover:bg-[color-mix(in_oklch,var(--accent)_15%,var(--bg))]"
+    id="backToTop"
+    aria-label="Наверх"
+    data-astro-transition-persist="back-to-top"
+  >
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -164,7 +186,8 @@ const initials = post.data.author
       stroke-linecap="round"
       stroke-linejoin="round"
       class="h-[26px] w-[26px] transition-transform duration-250 max-md:h-5 max-md:w-5 group-hover:-translate-y-[3px]"
-    ><polyline points="18 15 12 9 6 15"></polyline></svg>
+      ><polyline points="18 15 12 9 6 15"></polyline></svg
+    >
   </button>
 </Layout>
 

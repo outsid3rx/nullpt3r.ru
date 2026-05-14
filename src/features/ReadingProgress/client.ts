@@ -36,13 +36,21 @@ export function initReadingProgress(): void {
 
   window.addEventListener('scroll', onScroll, { passive: true, signal });
 
-  backBtn?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, { signal });
-  backBtn?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
+  backBtn?.addEventListener(
+    'click',
+    () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, { signal });
+    },
+    { signal },
+  );
+  backBtn?.addEventListener(
+    'keydown',
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
+    { signal },
+  );
 }

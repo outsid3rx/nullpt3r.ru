@@ -13,7 +13,17 @@ export interface Props {
 
 import { ViewTransitions } from 'astro:transitions';
 
-const { title, description, ogTitle, ogType, ogImage, ogUrl, publishedTime, articleAuthor, articleTags } = Astro.props;
+const {
+  title,
+  description,
+  ogTitle,
+  ogType,
+  ogImage,
+  ogUrl,
+  publishedTime,
+  articleAuthor,
+  articleTags,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -39,8 +49,7 @@ const { title, description, ogTitle, ogType, ogImage, ogUrl, publishedTime, arti
     {articleTags?.map((tag) => <meta property="article:tag" content={tag} />)}
     <script is:inline>
       (function () {
-        var KEY = 'nullptr-theme';
-        var saved = localStorage.getItem(KEY);
+        const saved = localStorage.getItem('nullptr-theme');
         if (
           saved === 'dark' ||
           (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -73,7 +82,9 @@ const { title, description, ogTitle, ogType, ogImage, ogUrl, publishedTime, arti
       }
     </style>
   </head>
-  <body class="m-0 bg-[var(--bg)] text-[var(--fg)] font-body text-[15px]/[1.6] antialiased transition-colors duration-200">
+  <body
+    class="m-0 bg-[var(--bg)] text-[var(--fg)] font-body text-[15px]/[1.6] antialiased transition-colors duration-200"
+  >
     <slot />
   </body>
 </html>
@@ -82,7 +93,8 @@ const { title, description, ogTitle, ogType, ogImage, ogUrl, publishedTime, arti
   document.addEventListener('astro:before-swap', (e) => {
     const KEY = 'nullptr-theme';
     const saved = localStorage.getItem(KEY);
-    const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const isDark =
+      saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
     e.newDocument.documentElement.classList.toggle('dark', isDark);
   });
 </script>

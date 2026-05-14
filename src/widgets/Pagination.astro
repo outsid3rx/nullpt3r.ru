@@ -18,7 +18,11 @@ function pageUrl(n: number): string {
 <nav class="flex items-center justify-center gap-1 pt-8" aria-label="Навигация по страницам">
   {
     hasPrev ? (
-      <a href={pageUrl(currentPage - 1)} class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg" aria-label="Предыдущая страница">
+      <a
+        href={pageUrl(currentPage - 1)}
+        class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg"
+        aria-label="Предыдущая страница"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -32,7 +36,10 @@ function pageUrl(n: number): string {
         </svg>
       </a>
     ) : (
-      <span class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30" aria-label="Предыдущая страница">
+      <span
+        class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30"
+        aria-label="Предыдущая страница"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -54,7 +61,10 @@ function pageUrl(n: number): string {
           {n}
         </span>
       ) : (
-        <a href={pageUrl(n)} class="inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg">
+        <a
+          href={pageUrl(n)}
+          class="inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg"
+        >
           {n}
         </a>
       ),
@@ -62,7 +72,11 @@ function pageUrl(n: number): string {
   }
   {
     hasNext ? (
-      <a href={pageUrl(currentPage + 1)} class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg" aria-label="Следующая страница">
+      <a
+        href={pageUrl(currentPage + 1)}
+        class="page-nav inline-flex min-w-8 items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted no-underline transition-all duration-150 hover:border-border hover:text-fg"
+        aria-label="Следующая страница"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -76,7 +90,10 @@ function pageUrl(n: number): string {
         </svg>
       </a>
     ) : (
-      <span class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30" aria-label="Следующая страница">
+      <span
+        class="page-nav inline-flex min-w-8 cursor-default items-center justify-center rounded-md border border-transparent px-3 py-1.5 font-body text-[13px]/none -tracking-[0.01em] text-muted opacity-30"
+        aria-label="Следующая страница"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"

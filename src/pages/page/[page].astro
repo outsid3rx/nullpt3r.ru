@@ -34,8 +34,14 @@ const pagePosts = allPosts.slice(start, start + perPage);
   <Header />
   <main class="mx-auto max-w-[720px] px-6 pb-20 pt-10 max-sm:px-4 max-sm:pb-[60px]">
     <div class="mb-8 flex items-baseline justify-between">
-      <h1 class="m-0 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]">Последние статьи</h1>
-      <span class="text-[13px] -tracking-[0.01em] text-muted">{allPosts.length} {plural(allPosts.length, 'статья', 'статьи', 'статей')}</span>
+      <h1
+        class="m-0 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]"
+      >
+        Последние статьи
+      </h1>
+      <span class="text-[13px] -tracking-[0.01em] text-muted"
+        >{allPosts.length} {plural(allPosts.length, 'статья', 'статьи', 'статей')}</span
+      >
     </div>
 
     {
@@ -48,7 +54,7 @@ const pagePosts = allPosts.slice(start, start + perPage);
           authorAvatar={post.data.authorAvatar}
           publishedAt={post.data.publishedAt}
           tags={post.data.tags}
-            slug={postSlug(post)}
+          slug={postSlug(post)}
         />
       ))
     }

@@ -56,7 +56,11 @@ const countLabel = `${tagPosts.length} ${plural(tagPosts.length, 'статья',
       <div class="mb-4 text-[13px] -tracking-[0.01em] text-muted">
         <a href="/" class="hover:text-accent">← Все статьи</a>
       </div>
-      <h1 class="m-0 mb-2 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]">#{canonicalTag}</h1>
+      <h1
+        class="m-0 mb-2 font-display text-[28px]/[1.2] font-bold -tracking-[0.02em] text-fg max-sm:text-[22px]"
+      >
+        #{canonicalTag}
+      </h1>
       <span class="text-[13px] -tracking-[0.01em] text-muted">{countLabel}</span>
     </div>
 
@@ -76,8 +80,12 @@ const countLabel = `${tagPosts.length} ${plural(tagPosts.length, 'статья',
         ))
       ) : (
         <div class="py-20 text-center text-muted">
-          <p class="m-0 mb-4 text-[14px]">По тегу «{canonicalTag}» {plural(0, 'статья', 'статьи', 'статей')} пока нет</p>
-          <a href="/" class="text-[13px] text-accent hover:opacity-70">← Все статьи</a>
+          <p class="m-0 mb-4 text-[14px]">
+            По тегу «{canonicalTag}» {plural(0, 'статья', 'статьи', 'статей')} пока нет
+          </p>
+          <a href="/" class="text-[13px] text-accent hover:opacity-70">
+            ← Все статьи
+          </a>
         </div>
       )
     }

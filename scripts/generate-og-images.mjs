@@ -1,10 +1,13 @@
-import { readFileSync, writeFileSync, unlinkSync, mkdirSync, readdirSync, existsSync } from 'fs';
-import { fileURLToPath } from 'url';
+import { readFileSync, writeFileSync, unlinkSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const POSTS_DIR = new URL('../src/content/posts/', import.meta.url);
 const TEMPLATE_PATH = new URL('../src/shared/lib/og-template.html', import.meta.url);
-const TEMPLATE_OVERLAY_PATH = new URL('../src/shared/lib/og-template-overlay.html', import.meta.url);
+const TEMPLATE_OVERLAY_PATH = new URL(
+  '../src/shared/lib/og-template-overlay.html',
+  import.meta.url,
+);
 const PUBLIC_DIR = new URL('../public/', import.meta.url);
 const OUT_DIR = new URL('../public/og/', import.meta.url);
 const SITE_DOMAIN = 'nullpt3r.ru';
@@ -152,7 +155,6 @@ async function main() {
 
     await page.close();
     unlinkSync(tmpHtmlPath);
-
 
     console.log(`  ✓ ${slug}.png`);
   }

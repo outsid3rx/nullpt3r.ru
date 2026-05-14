@@ -1,174 +1,180 @@
 <!doctype html>
-<html lang="ru"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OG Image — nullptr</title>
-  <style>
-    :root {
-      --bg:      oklch(99% 0.002 240);
-      --surface: oklch(100% 0 0);
-      --fg:      oklch(18% 0.012 250);
-      --muted:   oklch(54% 0.012 250);
-      --border:  oklch(92% 0.005 250);
-      --accent:  oklch(58% 0.18 255);
-      --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-      --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { -webkit-font-smoothing: antialiased; }
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OG Image — nullptr</title>
+    <style>
+      :root {
+        --bg: oklch(99% 0.002 240);
+        --surface: oklch(100% 0 0);
+        --fg: oklch(18% 0.012 250);
+        --muted: oklch(54% 0.012 250);
+        --border: oklch(92% 0.005 250);
+        --accent: oklch(58% 0.18 255);
+        --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+        --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-font-smoothing: antialiased;
+      }
 
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font: 16px/1.6 var(--font-body);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.6 var(--font-body);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-    .canvas-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
+      .canvas-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
 
-    .og-canvas {
-      width: 100%;
-      max-width: 1200px;
-      aspect-ratio: 1200 / 630;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-    }
+      .og-canvas {
+        width: 100%;
+        max-width: 1200px;
+        aspect-ratio: 1200 / 630;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      }
 
-    .og-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 40px 40px 0;
-    }
-    .og-logo {
-      font: 700 22px/1 var(--font-display);
-      letter-spacing: -0.03em;
-      color: var(--fg);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .og-logo span { color: var(--accent); }
-    .og-logo-sub {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--muted);
-      letter-spacing: -0.01em;
-    }
-    .og-domain {
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.02em;
-    }
+      .og-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px 40px 0;
+      }
+      .og-logo {
+        font: 700 22px/1 var(--font-display);
+        letter-spacing: -0.03em;
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .og-logo span {
+        color: var(--accent);
+      }
+      .og-logo-sub {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--muted);
+        letter-spacing: -0.01em;
+      }
+      .og-domain {
+        font-size: 13px;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+      }
 
-    .og-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 56px 40px 0;
-    }
+      .og-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 56px 40px 0;
+      }
 
-    .og-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-    .og-tag {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 4px;
-      background: var(--border);
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0.01em;
-    }
+      .og-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .og-tag {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        background: var(--border);
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.01em;
+      }
 
-    .og-title {
-      font: 700 clamp(28px, 3.5vw, 44px)/1.2 var(--font-display);
-      letter-spacing: -0.02em;
-      color: var(--fg);
-      max-width: 85%;
-      margin-bottom: 16px;
-    }
+      .og-title {
+        font: 700 clamp(28px, 3.5vw, 44px)/1.2 var(--font-display);
+        letter-spacing: -0.02em;
+        color: var(--fg);
+        max-width: 85%;
+        margin-bottom: 16px;
+      }
 
-    .og-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .og-meta .avatar,
-    .og-meta .avatar-img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .og-meta .avatar {
-      background: var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font: 600 11px/1 var(--font-display);
-      color: var(--muted);
-    }
-    .og-meta .avatar-img {
-      object-fit: cover;
-    }
-    .og-meta .author-name {
-      color: var(--fg);
-      font-weight: 500;
-    }
-    .og-meta .sep {
-      color: var(--border);
-    }
-  </style>
-</head>
-<body>
-
-<div class="canvas-wrapper">
-  <div class="og-canvas" id="ogCanvas">
-    <div class="og-top">
-      <div class="og-logo">
-        nullptr<span>;</span>
-        <span class="og-logo-sub">блог о разработке</span>
-      </div>
-      <div class="og-domain">{{domain}}</div>
-    </div>
-    <div class="og-body">
-      <div class="og-tags">
-        {{tags}}
-      </div>
-      <h1 class="og-title">{{title}}</h1>
-      <div class="og-meta">
-        {{avatar}}
-        <div>
-          <span class="author-name">{{author}}</span>
-          <span class="sep">·</span>
-          <span>{{date}}</span>
-          <span class="sep">·</span>
-          <span>{{readingTime}} мин чтения</span>
+      .og-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .og-meta .avatar,
+      .og-meta .avatar-img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .og-meta .avatar {
+        background: var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 600 11px/1 var(--font-display);
+        color: var(--muted);
+      }
+      .og-meta .avatar-img {
+        object-fit: cover;
+      }
+      .og-meta .author-name {
+        color: var(--fg);
+        font-weight: 500;
+      }
+      .og-meta .sep {
+        color: var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="canvas-wrapper">
+      <div class="og-canvas" id="ogCanvas">
+        <div class="og-top">
+          <div class="og-logo">
+            nullptr<span>;</span>
+            <span class="og-logo-sub">блог о разработке</span>
+          </div>
+          <div class="og-domain">{{domain}}</div>
+        </div>
+        <div class="og-body">
+          <div class="og-tags">{{tags}}</div>
+          <h1 class="og-title">{{title}}</h1>
+          <div class="og-meta">
+            {{avatar}}
+            <div>
+              <span class="author-name">{{author}}</span>
+              <span class="sep">·</span>
+              <span>{{date}}</span>
+              <span class="sep">·</span>
+              <span>{{readingTime}} мин чтения</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-</body></html>
+  </body>
+</html>
