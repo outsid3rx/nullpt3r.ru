@@ -101,16 +101,18 @@ const initials = post.data.author
 
       {
         post.data.heroImage && (
-          <Picture
-            src={post.data.heroImage}
-            widths={[480, 768, 1200]}
-            sizes="(max-width: 768px) calc(100vw - 48px), 720px"
-            formats={['avif', 'webp']}
-            alt=""
-            class="mb-10 aspect-video w-full overflow-hidden rounded-lg object-cover"
-            loading="eager"
-            decoding="async"
-          />
+          <div data-zoom>
+            <Picture
+              src={post.data.heroImage}
+              widths={[480, 768, 1200]}
+              sizes="(max-width: 768px) calc(100vw - 48px), 720px"
+              formats={['avif', 'webp']}
+              alt=""
+              class="mb-10 aspect-video w-full overflow-hidden rounded-lg object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
         )
       }
 
@@ -224,10 +226,12 @@ const initials = post.data.author
 <script>
   import { initReadingProgress } from '../../features/ReadingProgress/client.ts';
   import { initCommentsBar } from '../../features/CommentsBar/client.ts';
+  import { initImageZoom } from '../../features/ImageZoom/client.ts';
 
   document.addEventListener('astro:page-load', () => {
     initReadingProgress();
     initCommentsBar();
+    initImageZoom();
   });
 </script>
 
