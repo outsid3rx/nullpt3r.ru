@@ -189,13 +189,28 @@ const initials = post.data.author
       ><polyline points="18 15 12 9 6 15"></polyline></svg
     >
   </button>
+
+  <div
+    class="comments-bar fixed bottom-6 left-1/2 z-20 flex h-12 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[24px] border border-border bg-[color-mix(in_oklch,var(--bg)_92%,transparent)] px-6 text-[14px] leading-none -tracking-[0.01em] text-muted opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-md transition-all duration-300 pointer-events-none dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] font-body"
+    id="commentsBar"
+    role="button"
+    tabindex="0"
+    aria-label="К комментариям"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 opacity-60"
+      ><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg
+    >
+    Комментарии и реакции
+  </div>
 </Layout>
 
 <script>
   import { initReadingProgress } from '../../features/ReadingProgress/client.ts';
+  import { initCommentsBar } from '../../features/CommentsBar/client.ts';
 
   document.addEventListener('astro:page-load', () => {
     initReadingProgress();
+    initCommentsBar();
   });
 </script>
 
@@ -203,6 +218,18 @@ const initials = post.data.author
   .back-to-top.visible {
     opacity: 1;
     pointer-events: auto;
+  }
+  .comments-bar {
+    transform: translateX(-50%) translateY(100%);
+  }
+  .comments-bar.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .comments-bar:hover {
+    color: var(--fg);
+    border-color: color-mix(in oklch, var(--border) 50%, var(--accent));
   }
   .article-body :global(code) {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
