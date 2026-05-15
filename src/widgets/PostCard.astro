@@ -1,8 +1,10 @@
 ---
+import { Picture } from 'astro:assets';
+
 export interface Props {
   title: string;
   description: string;
-  heroImage?: string;
+  heroImage?: Parameters<typeof Picture>[0]['src'];
   author: string;
   authorAvatar?: string;
   publishedAt: Date;
@@ -26,9 +28,16 @@ const dateStr = publishedAt.toLocaleDateString('ru-RU', {
   >
     {
       heroImage && (
-        <div class="relative mb-4 aspect-video w-full overflow-hidden rounded-lg">
-          <img src={heroImage} alt="" loading="lazy" class="h-full w-full object-cover" />
-        </div>
+        <Picture
+          src={heroImage}
+          widths={[480, 768]}
+          sizes="(max-width: 768px) calc(100vw - 48px), 720px"
+          formats={['avif', 'webp']}
+          alt=""
+          class="mb-4 aspect-video w-full overflow-hidden rounded-lg object-cover"
+          loading="lazy"
+          decoding="async"
+        />
       )
     }
     <div class="mb-2 flex items-center gap-2.5 text-[12px] -tracking-[0.01em] text-muted">

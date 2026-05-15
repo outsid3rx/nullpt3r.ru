@@ -3,9 +3,9 @@ title: 'rebased - Git-клиент на базе IntelliJ'
 description: 'Посмотрим, как устроен новый Git-клиент. Кому может быть интересен и полезен?'
 publishedAt: 2026-05-14
 tags: ['Git', 'tools', 'IDE', 'shorts']
-heroImage: '/images/hero/rebased-git-ui.webp'
+heroImage: './images/hero/rebased-git-ui.webp'
 author: 'Макс Зерняев'
-authorAvatar: '/images/avatars/max-zernyaev.webp'
+authorAvatar: './images/avatars/max-zernyaev.webp'
 draft: false
 ---
 

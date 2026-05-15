@@ -96,13 +96,13 @@ async function main() {
     const initials = getInitials(data.author);
     const readingTime = computeReadingTime(body);
     const dateStr = formatDate(data.publishedAt || new Date());
-    const tagsHtml = (data.tags || [])
-      .map((t) => `        <span class="og-tag">${t}</span>`)
-      .join('\n');
+    const tagsHtml = (data.tags || []).map((t) => `<span class="og-tag">${t}</span>`).join('\n');
+
+    const postDir = new URL('.', new URL(file, POSTS_DIR));
 
     let avatarHtml;
     if (data.authorAvatar) {
-      const avatarUrl = new URL(data.authorAvatar.replace(/^\//, ''), PUBLIC_DIR);
+      const avatarUrl = new URL(data.authorAvatar, postDir);
       avatarHtml = `<img src="${avatarUrl.href}" alt="" class="avatar-img" />`;
     } else {
       avatarHtml = `<div class="avatar">${initials}</div>`;
@@ -121,7 +121,7 @@ async function main() {
       .replaceAll('{{domain}}', SITE_DOMAIN);
 
     if (hasHero) {
-      const heroUrl = new URL(data.heroImage.replace(/^\//, ''), PUBLIC_DIR);
+      const heroUrl = new URL(data.heroImage, postDir);
       html = html.replace('{{heroImage}}', heroUrl.href);
     }
 

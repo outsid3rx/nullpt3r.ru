@@ -1,4 +1,5 @@
 ---
+import { Picture, Image } from 'astro:assets';
 import plural from 'plural-ru';
 import type { GetStaticPaths } from 'astro';
 import Layout from '../../app/Layout.astro';
@@ -75,10 +76,12 @@ const initials = post.data.author
         <div class="mb-6 flex items-center gap-3 text-[14px] text-muted">
           {
             post.data.authorAvatar ? (
-              <img
+              <Image
                 src={post.data.authorAvatar}
                 alt={post.data.author}
                 class="h-10 w-10 shrink-0 rounded-full object-cover"
+                width={40}
+                height={40}
               />
             ) : (
               <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-border font-display text-[14px]/none font-semibold text-muted">
@@ -98,9 +101,16 @@ const initials = post.data.author
 
       {
         post.data.heroImage && (
-          <div class="relative mb-10 aspect-video w-full overflow-hidden rounded-lg">
-            <img src={post.data.heroImage} alt="" class="h-full w-full object-cover" />
-          </div>
+          <Picture
+            src={post.data.heroImage}
+            widths={[480, 768, 1200]}
+            sizes="(max-width: 768px) calc(100vw - 48px), 720px"
+            formats={['avif', 'webp']}
+            alt=""
+            class="mb-10 aspect-video w-full overflow-hidden rounded-lg object-cover"
+            loading="eager"
+            decoding="async"
+          />
         )
       }
 
@@ -197,7 +207,14 @@ const initials = post.data.author
     tabindex="0"
     aria-label="К комментариям"
   >
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 opacity-60"
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-4 w-4 opacity-60"
       ><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg
     >
     Комментарии и реакции
