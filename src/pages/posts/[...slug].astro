@@ -2,11 +2,11 @@
 import { Picture, Image } from 'astro:assets';
 import plural from 'plural-ru';
 import type { GetStaticPaths } from 'astro';
-import Layout from '../../app/Layout.astro';
-import Header from '../../widgets/Header.astro';
-import Footer from '../../widgets/Footer.astro';
-import Giscus from '../../shared/ui/Giscus.astro';
-import RelatedPosts from '../../widgets/RelatedPosts.astro';
+import Layout from '../../app/layout.astro';
+import Header from '../../widgets/header.astro';
+import Footer from '../../widgets/footer.astro';
+import Giscus from '../../shared/ui/giscus.astro';
+import RelatedPosts from '../../widgets/related-posts.astro';
 import { getCollection } from 'astro:content';
 import { postSlug } from '../../shared/lib/db';
 
@@ -224,9 +224,9 @@ const initials = post.data.author
 </Layout>
 
 <script>
-  import { initReadingProgress } from '../../features/ReadingProgress/client.ts';
-  import { initCommentsBar } from '../../features/CommentsBar/client.ts';
-  import { initImageZoom } from '../../features/ImageZoom/client.ts';
+  import { initReadingProgress } from '../../features/reading-progress/client.ts';
+  import { initCommentsBar } from '../../features/comments-bar/client.ts';
+  import { initImageZoom } from '../../features/image-zoom/client.ts';
 
   document.addEventListener('astro:page-load', () => {
     initReadingProgress();
