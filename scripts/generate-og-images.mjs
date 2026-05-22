@@ -83,7 +83,7 @@ async function main() {
 
   const templatePlain = readFileSync(TEMPLATE_PATH, 'utf-8');
   const templateOverlay = readFileSync(TEMPLATE_OVERLAY_PATH, 'utf-8');
-  const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md'));
+  const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md') || f.endsWith('.mdx'));
 
   const pages = [];
 
