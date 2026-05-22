@@ -1,0 +1,146 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { extractExtension, resolveFileLabel } from '../shared/lib/file-types';
+
+interface FileAttachment {
+  type: 'file';
+  name: string;
+  url: string;
+  extension?: string;
+}
+
+interface LinkAttachment {
+  type: 'link';
+  name: string;
+  url: string;
+}
+
+type Attachment = FileAttachment | LinkAttachment;
+
+export interface Props {
+  attachments: Attachment[];
+}
+
+const { attachments } = Astro.props;
+
+function getFileSize(url: string): string | null {
+  try {
+    const stats = fs.statSync(path.join(process.cwd(), 'public', url));
+    if (!stats.isFile()) return null;
+    const bytes = stats.size;
+    if (bytes === 0) return null;
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let value = bytes;
+    let unitIndex = 0;
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
+      unitIndex++;
+    }
+    const formatted = unitIndex === 0 ? value.toString() : value.toFixed(1);
+    return `${formatted} ${units[unitIndex]}`;
+  } catch {
+    return null;
+  }
+}
+
+function fileExt(att: FileAttachment): string {
+  return att.extension ?? extractExtension(att.url);
+}
+
+function isHttpUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
+---
+
+{
+  attachments.length > 0 && (
+    <section class="attachments-section">
+      <h3 class="attachments-heading">Приложения</h3>
+      <div class="attachments-grid">
+        {attachments.map((att) => {
+          if (att.type === 'file') {
+            const ext = fileExt(att);
+            const label = ext ? resolveFileLabel(ext) : null;
+            const size = getFileSize(att.url);
+            return (
+              <a
+                href={att.url}
+                class="attachment-card attachment-file"
+                download
+                target="_blank"
+                rel="noopener"
+              >
+                <div class="attachment-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                </div>
+                <div class="attachment-info">
+                  <span class="attachment-name">{att.name}</span>
+                  <div class="attachment-meta">
+                    {ext && <span class="attachment-badge">{ext}</span>}
+                    {label && <span class="attachment-label">{label}</span>}
+                    {size && <span class="attachment-size">{size}</span>}
+                  </div>
+                </div>
+                <span class="attachment-download" aria-label="Скачать">
+                  ↓
+                </span>
+              </a>
+            );
+          }
+
+          return (
+            <a
+              href={att.url}
+              class="attachment-card attachment-link"
+              target={isHttpUrl(att.url) ? '_blank' : undefined}
+              rel={isHttpUrl(att.url) ? 'noopener' : undefined}
+            >
+              <div class="attachment-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+              </div>
+              <div class="attachment-info">
+                <span class="attachment-name">{att.name}</span>
+                <span class="attachment-label-top">Ссылка</span>
+              </div>
+              <span class="attachment-external" aria-label="Открыть ссылку">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

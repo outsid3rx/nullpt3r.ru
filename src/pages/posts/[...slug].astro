@@ -7,6 +7,7 @@ import Header from '../../widgets/header.astro';
 import Footer from '../../widgets/footer.astro';
 import Giscus from '../../shared/ui/giscus.astro';
 import RelatedPosts from '../../widgets/related-posts.astro';
+import Attachments from '../../widgets/attachments.astro';
 import { getCollection } from 'astro:content';
 import { postSlug } from '../../shared/lib/db';
 
@@ -122,6 +123,8 @@ const initials = post.data.author
       >
         <Content />
       </div>
+
+      {post.data.attachments.length > 0 && <Attachments attachments={post.data.attachments} />}
 
       <div class="mt-10 border-t border-border pt-8">
         <div class="flex flex-wrap gap-6 text-[13px] text-muted">
@@ -301,5 +304,143 @@ const initials = post.data.author
     padding: 16px 24px;
     font-style: italic;
     color: var(--muted);
+  }
+  .attachments-section {
+    margin: 48px 0;
+  }
+  .attachments-heading {
+    font: 700 16px/1.4 var(--font-display);
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+  .attachments-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .attachment-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+  .attachment-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .attachment-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+  .attachment-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .attachment-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .attachment-name {
+    font: 500 14px/1.4 var(--font-body);
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .attachment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .attachment-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--border);
+    color: var(--muted);
+    font: 500 11px/1.4 var(--font-body);
+    letter-spacing: 0.01em;
+  }
+  .attachment-label {
+    font: 400 12px/1.4 var(--font-body);
+    color: var(--muted);
+    letter-spacing: -0.01em;
+  }
+  .attachment-size {
+    font: 400 12px/1.4 var(--font-body);
+    color: var(--muted);
+    letter-spacing: -0.01em;
+  }
+  .attachment-label-top {
+    font: 400 12px/1.4 var(--font-body);
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .attachment-download,
+  .attachment-external {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition:
+      color 0.15s,
+      background 0.15s;
+    margin-right: -4px;
+  }
+  .attachment-download:hover,
+  .attachment-external:hover {
+    color: var(--accent);
+    background: var(--border);
+  }
+  .attachment-external svg {
+    width: 16px;
+    height: 16px;
+  }
+  .attachment-download {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 400;
+  }
+  @media (max-width: 600px) {
+    .attachment-card {
+      padding: 10px 12px;
+    }
+    .attachment-icon {
+      width: 32px;
+      height: 32px;
+    }
+    .attachment-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    .attachment-name {
+      font-size: 13px;
+    }
+    .attachment-meta {
+      flex-wrap: wrap;
+      gap: 4px;
+    }
   }
 </style>

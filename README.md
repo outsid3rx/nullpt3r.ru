@@ -23,14 +23,15 @@ title: 'Название статьи'
 description: 'Краткое описание, 1-2 предложения'
 publishedAt: 2026-06-01
 tags: ['Rust', 'Performance']
-heroImage: './images/hero/my-post.webp'   # опционально
+heroImage: './images/hero/my-post.webp' # опционально
 author: 'Имя Автора'
-authorAvatar: './images/avatars/author.webp'  # опционально
+authorAvatar: './images/avatars/author.webp' # опционально
 draft: false
 ---
 ```
 
 **Поля:**
+
 - `title` — до 200 символов
 - `description` — до 500 символов
 - `publishedAt` — дата публикации
@@ -74,15 +75,15 @@ pnpm build
 
 ## Команды
 
-| Команда | Описание |
-|---|---|
-| `pnpm dev` | dev-сервер на `localhost:4321` |
-| `pnpm build` | сборка статики |
-| `pnpm preview` | превью собранного сайта |
+| Команда            | Описание                                  |
+| ------------------ | ----------------------------------------- |
+| `pnpm dev`         | dev-сервер на `localhost:4321`            |
+| `pnpm build`       | сборка статики                            |
+| `pnpm preview`     | превью собранного сайта                   |
 | `pnpm generate-og` | генерация OG-изображений для новых статей |
-| `pnpm lint` | ESLint |
-| `pnpm format` | форматирование через Prettier |
-| `pnpm typecheck` | TypeScript проверка |
+| `pnpm lint`        | ESLint                                    |
+| `pnpm format`      | форматирование через Prettier             |
+| `pnpm typecheck`   | TypeScript проверка                       |
 
 ## Технологии
 

@@ -1,5 +1,18 @@
 import { defineCollection, z } from 'astro:content';
 
+const fileAttachment = z.object({
+  type: z.literal('file'),
+  name: z.string(),
+  url: z.string(),
+  extension: z.string().optional(),
+});
+
+const linkAttachment = z.object({
+  type: z.literal('link'),
+  name: z.string(),
+  url: z.string(),
+});
+
 const posts = defineCollection({
   type: 'content',
   schema: ({ image }) =>
@@ -12,6 +25,10 @@ const posts = defineCollection({
       draft: z.boolean().default(false),
       author: z.string().default('Никита Поляков'),
       authorAvatar: image().optional(),
+      attachments: z
+        .array(z.discriminatedUnion('type', [fileAttachment, linkAttachment]))
+        .optional()
+        .default([]),
     }),
 });
 
