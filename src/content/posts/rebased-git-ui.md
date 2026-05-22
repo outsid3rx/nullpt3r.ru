@@ -7,6 +7,10 @@ heroImage: './images/hero/rebased-git-ui.webp'
 author: 'Макс Зерняев'
 authorAvatar: './images/avatars/max-zernyaev.webp'
 draft: false
+attachments:
+  - name: 'Репозиторий rebased'
+    url: 'https://github.com/DetachHead/rebased'
+    type: 'link'
 ---
 
 Я много раз пытался перейти с WebStorm на какой-нибудь открытый редактор, но со временем, по тем или иным причинам, возвращался к IDE от IntelliJ.
@@ -23,7 +27,3 @@ draft: false
 - Простая установка из списка релизов или через `winget/brew`
 
 Как оказалось, я не единственный, кому сильно запал в душу клиент от JetBrains - просьбы опубликовать Git-клиент отдельно от IDE были уже <a href="https://youtrack.jetbrains.com/issue/IJPL-72504/Make-git-client-a-standalone-app" target="_blank" rel="noopener noreferrer">давно</a> и этот issue один из самых популярных.
-
-Ссылки:
-
-- <a href="https://github.com/DetachHead/rebased" target="_blank" rel="noopener noreferrer">Репозиторий rebased</a>
